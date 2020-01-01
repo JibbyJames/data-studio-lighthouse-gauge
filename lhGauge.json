@@ -169,7 +169,7 @@
           "id": "fontFamily",
           "label": "Metric Value Font",
           "type": "FONT_FAMILY",
-          "defaultValue": "Roboto Mono"
+          "defaultValue": "Open Sans"
         },
         {
           "id": "fontSize",
