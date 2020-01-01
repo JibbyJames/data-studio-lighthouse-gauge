@@ -1,7 +1,7 @@
 # data-studio-lighthouse-gauge
  A community visualisation for Google Data Studio in the style of the site speed auditing tool Lighthouse gauges.
 
- ![alt text](https://github.com/jibbyjames/data-studio-lighthouse-gauge/cover.png "Lighthouse Gauge")
+ ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/cover.png "Lighthouse Gauge")
 
  To use in Data Studio, open the Community Visualisation panel, then set the following as the manifest path:
  
