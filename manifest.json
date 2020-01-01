@@ -1,0 +1,22 @@
+{
+  "name": "Lighthouse Gauge",
+  "logoUrl": "gs://jjbuckley-datastudio/lighthouse-gauge/cover.png",
+  "organization": "James Buckley",
+  "supportUrl": "https://url",
+  "packageUrl": "https://url",
+  "privacyPolicyUrl": "https://url",
+  "description": "Lighthouse Gauge",
+  "devMode": true,
+  "components": [{
+    "id": "lhGauge",
+    "name": "Lighthouse Gauge",
+    "iconUrl": "https://raw.githubusercontent.com/googledatastudio/community-visualizations/master/docs/codelab/img/bar_chart.png",
+    "description": "Gauge in style of Lighthouse reports created with JS and CSS",
+    "resource": {
+      "config": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.json",
+      "js": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.js",
+      "css": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.css",      
+      "content": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.html" 
+    }
+  }]
+}

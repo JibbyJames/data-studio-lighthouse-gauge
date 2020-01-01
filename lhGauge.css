@@ -1,0 +1,149 @@
+html {
+  --gauge-circle-size: 120px;
+  --report-font-family-monospace: 'Roboto', 'Menlo', 'dejavu sans mono', 'Consolas', 'Lucida Console', monospace; 
+
+    /* Palette using Material Design Colors
+   * https://www.materialui.co/colors */
+   --color-amber-50: #FFF8E1;
+   --color-blue-200: #90CAF9;
+   --color-blue-900: #0D47A1;
+   --color-blue-A700: #2962FF;
+   --color-cyan-500: #00BCD4;
+   --color-gray-100: #F5F5F5;
+   --color-gray-200: #E0E0E0;
+   --color-gray-400: #BDBDBD;
+   --color-gray-50: #FAFAFA;
+   --color-gray-500: #9E9E9E;
+   --color-gray-600: #757575;
+   --color-gray-700: #616161;
+   --color-gray-800: #424242;
+   --color-gray-900: #212121;
+   --color-gray: #000000;
+   --color-green-700: #018642;
+   --color-green: #0CCE6B;
+   --color-orange-700: #D04900;
+   --color-orange: #FFA400;
+   --color-red-700: #EB0F00;
+   --color-red: #FF4E42;
+   --color-teal-600: #00897B;
+   --color-white: #FFFFFF;
+ 
+   /* Context-specific colors */
+   --color-average-secondary: var(--color-orange-700);
+   --color-average: var(--color-orange);
+   --color-fail-secondary: var(--color-red-700);
+   --color-fail: var(--color-red);
+   --color-informative: var(--color-blue-900);
+   --color-pass-secondary: var(--color-green-700);
+   --color-pass: var(--color-green);
+   --color-hover: var(--color-gray-50);
+
+   overflow: hidden;
+}
+
+.u-absoluteCenter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+  .u-flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .u-offscreen {
+    position: absolute;
+    left: -999em;
+  }
+  .demo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .demo :first-child {
+    margin-bottom: 20px;
+  }
+  #progress {
+    -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+  }
+
+  #progress__background.low {
+    fill: #ffeeec;
+    stroke: #ffeeec;
+  }
+
+  #progress__background.mid {
+    fill: #fff6e6;  
+    stroke: #fff6e6;  
+  }
+
+  #progress__background.high {
+    fill: #e7faf0;  
+    stroke: #e7faf0;  
+  }
+  
+  #progress__arc {
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  #progress__arc.low {
+    stroke: #ff4e42;    
+  }
+
+  #progress__arc.mid {
+    stroke: #ffa400;
+  }
+
+  #progress__arc.high {
+    stroke: #0cce6b;    
+  }
+
+  #progress__value {
+    position: absolute;
+    top: -15px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: var(--report-font-family-monospace);
+    /*font-size: calc(var(--gauge-circle-size) * 0.34 + 1.3px);*/
+  }
+
+  #progress__value.low {
+    color: #ff4e42
+  }
+  #progress__value.mid {
+    color: #ffa400
+  }
+  #progress__value.high {
+    color: #0cce6b
+  }
+
+  .controls {
+    position: absolute;
+    top: 300px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
