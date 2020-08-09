@@ -29,8 +29,7 @@ const progressBackgroundCircleId = "progress__background";
 const progressArcCircleId = "progress__arc";
 const progressValueDivId = "progress__value";
 
-const RADIUS = 54;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+const SVG_SIZE = 240;
 
 const ranges = {
     LOW: 'low',
@@ -80,6 +79,8 @@ function drawGauge(metricValue, metricLabel, gaugeOptions) {
     var gaugeDiv = document.getElementById(gaugeDivId);
     var gaugeDivExists = true && gaugeDiv
 
+    var lineWidth = gaugeOptions['lineThickness']
+
     if (!gaugeDivExists) {
         gaugeDiv = document.createElement('div');
         gaugeDiv.id = gaugeDivId;
@@ -87,23 +88,23 @@ function drawGauge(metricValue, metricLabel, gaugeOptions) {
 
     var progressSvg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
     progressSvg.id = "progress";
-    progressSvg.width = "240";
-    progressSvg.height = "240";
-    progressSvg.setAttribute("viewBox", "0 0 120 120");
+    progressSvg.width = SVG_SIZE;
+    progressSvg.height = SVG_SIZE;
+    progressSvg.setAttribute("viewBox", "0 0 " + (SVG_SIZE/2) + " " + (SVG_SIZE/2));
 
     var progressBackgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     progressBackgroundCircle.id = progressBackgroundCircleId;
-    progressBackgroundCircle.setAttribute("cx", "60");
-    progressBackgroundCircle.setAttribute("cy", "60");
-    progressBackgroundCircle.setAttribute("r", "54");
-    progressBackgroundCircle.setAttribute("stroke-width", "12");
+    progressBackgroundCircle.setAttribute("cx", (SVG_SIZE/4));
+    progressBackgroundCircle.setAttribute("cy", (SVG_SIZE/4));
+    progressBackgroundCircle.setAttribute("r", ((SVG_SIZE/4) - (lineWidth/2)));
+    progressBackgroundCircle.setAttribute("stroke-width", lineWidth);
 
     var progressArcCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     progressArcCircle.id = progressArcCircleId;
-    progressArcCircle.setAttribute("cx", "60");
-    progressArcCircle.setAttribute("cy", "60");
-    progressArcCircle.setAttribute("r", "54");
-    progressArcCircle.setAttribute("stroke-width", "12");
+    progressArcCircle.setAttribute("cx", (SVG_SIZE/4));
+    progressArcCircle.setAttribute("cy", (SVG_SIZE/4));
+    progressArcCircle.setAttribute("r", ((SVG_SIZE/4) - (lineWidth/2)));
+    progressArcCircle.setAttribute("stroke-width", lineWidth);
 
     progressSvg.appendChild(progressBackgroundCircle);
     progressSvg.appendChild(progressArcCircle);
@@ -126,8 +127,15 @@ function drawGauge(metricValue, metricLabel, gaugeOptions) {
     progress(metricValue, gaugeOptions);
 }
 
+/**
+ * Sets the gauge to the correct value, updating the colours and progress arc accordingly.
+ *
+ * @param {!Float} value The current value of the data to display
+ * @param {!Object} gaugeOptions The object containing config values configured by the user.
+ */
 function progress(value, gaugeOptions) {
 
+    var progressBackground = document.querySelector('#progress__background');
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
 
@@ -138,12 +146,18 @@ function progress(value, gaugeOptions) {
     var highFrom = gaugeOptions.highFrom
     var highTo = gaugeOptions.highTo
 
+    // Line thickness alters required circle radius
+    var lineWidth = gaugeOptions['lineThickness']
+    var radius = (SVG_SIZE/4) - (lineWidth/2)
+    var circumference = 2 * Math.PI * radius;
+
+    // Set progress stroke offset to (0-360) value based on value/max figures.
     var progress = (value - gaugeOptions.min) / gaugeOptions.max;
-    var dashoffset = CIRCUMFERENCE * (1 - progress);
+    var dashoffset = circumference * (1 - progress);
+    progressArc.style.strokeDasharray = circumference;
+    progressArc.style.strokeDashoffset = dashoffset;
 
-    progressArc.style.strokeDasharray = CIRCUMFERENCE;
-
-    // Change vis colours depending on value
+    // Change guage colours depending on value
     if (value >= lowFrom && value <= lowTo) {
         updateProgressClasses(ranges.LOW, gaugeOptions);
     } else if (value >= midFrom && value <= midTo) {
@@ -154,27 +168,34 @@ function progress(value, gaugeOptions) {
         updateProgressClasses(ranges.DEFAULT, gaugeOptions);
     }
 
-    progressArc.style.strokeDashoffset = dashoffset;
+    // Set additional style options.
+    progressBackground.style.opacity = (gaugeOptions['fillGaugeCenter']) ? 1.0 : 0.0;
+    progressArc.style.setProperty('stroke-linecap', ((gaugeOptions['roundedLineEdge']) ? 'round' : 'butt'));
+
+    // Set metric value
     progressValue.innerHTML = value;
 }
 
+/**
+ * Sets the guage colour based on the currently enabled section, determined by ranges defined by user.
+ *
+ * @param {!String} range The name given to each coloured range/section of the gauge.
+ */
 function updateProgressClasses(range, gaugeOptions) {
 
     var progressBackground = document.querySelector('#progress__background');
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
 
-    const primaryColorKey = range + 'PrimaryColor';
-    const secondaryColorKey = range + 'SecondaryColor';
+    var primaryColorKey = range + 'PrimaryColor';
+    var secondaryColorKey = range + 'SecondaryColor';
 
     progressBackground.style.fill = gaugeOptions[secondaryColorKey]
     progressBackground.style.stroke = gaugeOptions[secondaryColorKey]
-
+    
     progressArc.style.stroke = gaugeOptions[primaryColorKey]
-
     progressValue.style.color = gaugeOptions[primaryColorKey]
 }
-
 
 /**
  * Clear the div that holds charts and messages.
@@ -187,7 +208,6 @@ function clearChartDiv() {
         }
     }
 }
-
 
 /**
  * Returns The UI style control options set by the user.
@@ -209,12 +229,13 @@ function getUiOptions(style) {
         getRangeOptions(ranges.MIDDLE, style),
         getRangeOptions(ranges.HIGH, style),
         getRangeOptions(ranges.DEFAULT, style),
+        getVisualOptions(style),
         getGaugeDimensions()
     );
 }
 
 /**
- * Get the color style options from user selections for the given color.
+ * Get the section color style options from user selections for the given color.
  *
  * @param {string} range The range options to return.
  * @param {!Object} style The style options configured by the user.
@@ -227,8 +248,10 @@ function getRangeOptions(range, style) {
     const fromKey = range + 'From';
     const toKey = range + 'To';
 
-    options[primaryColorKey] = style[primaryColorKey].value && style[primaryColorKey].value.color || style[primaryColorKey].defaultValue;
-    options[secondaryColorKey] = style[secondaryColorKey].value && style[secondaryColorKey].value.color || style[secondaryColorKey].defaultValue;
+    options[primaryColorKey] = style[primaryColorKey].value && style[primaryColorKey].value.color
+        || style[primaryColorKey].defaultValue;
+    options[secondaryColorKey] = style[secondaryColorKey].value && style[secondaryColorKey].value.color
+        || style[secondaryColorKey].defaultValue;
 
     if (style[fromKey] && style[toKey]) {
         options[fromKey] = style[fromKey].value || style[fromKey].defaultValue;
@@ -238,6 +261,21 @@ function getRangeOptions(range, style) {
     return options;
 }
 
+/**
+ * Get the color style options from user selections for the given color.
+ *
+ * @param {!Object} style The style options configured by the user.
+ * @return {!Object} The visual style options.
+ */
+function getVisualOptions(style) {
+    let options = {};
+
+    options['fillGaugeCenter'] = (style['fillGaugeCenter'].value == undefined) ? style['fillGaugeCenter'].defaultValue : style['fillGaugeCenter'].value;
+    options['roundedLineEdge'] = (style['roundedLineEdge'].value == undefined) ? style['roundedLineEdge'].defaultValue : style['roundedLineEdge'].value;
+    options['lineThickness'] = style['lineThickness'].value || style['lineThickness'].defaultValue;
+
+    return options;
+}
 
 /**
  * Get the height and width options for the viz.
@@ -250,7 +288,6 @@ function getGaugeDimensions() {
         width: dscc.getWidth()
     };
 }
-
 
 dscc.subscribeToData(drawChart, {
     transform: dscc.objectTransform

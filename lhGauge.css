@@ -95,7 +95,6 @@ html {
   
   #progress__arc {
     fill: none;
-    stroke-linecap: round;
   }
 
   #progress__arc.low {

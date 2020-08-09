@@ -178,6 +178,27 @@
           "defaultValue": "40"
         }
       ]
+    },{
+      "id": "visualOptions",
+      "label": "Visual Options",
+      "elements":[
+        {
+          "id": "fillGaugeCenter",
+          "label": "Fill Gauge Center",
+          "type": "CHECKBOX",
+          "defaultValue": "true"
+        },{
+          "id": "roundedLineEdge",
+          "label": "Progress Line Rounded",
+          "type": "CHECKBOX",
+          "defaultValue": "true"
+        },{
+          "id": "lineThickness",
+          "label": "Progress Line Thickness",
+          "type": "INTERVAL",
+          "defaultValue": "12"
+        }
+      ]
     }
   ]
 }
