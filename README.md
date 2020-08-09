@@ -7,8 +7,8 @@
  
  `gs://jjbuckley-datastudio/lighthouse-gauge/`
 
- Then set the following as the Component ID:
+ You will see the below card appear. Select this to add this visualisation to your report. Remember to enable community visualisations for your data sources as well.
 
- `lhGauge`
+ ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/lh-gauge-card.png "Lighthouse Gauge")
 
-The three range values and colours can be configured to match whatever metric being visualised, as well as the font size and family. This can all be done in the Style tab of the visualisation.
+The three range values and colours can be configured to match whatever metric being visualised, as well as the font size and family. The background can be hidden, line thickness increased, and switch between rounded or flat edges. This can all be done in the Style tab of the visualisation.

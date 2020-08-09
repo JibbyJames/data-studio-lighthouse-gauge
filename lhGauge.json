@@ -184,7 +184,7 @@
       "elements":[
         {
           "id": "fillGaugeCenter",
-          "label": "Fill Gauge Center",
+          "label": "Fill Gauge Centre",
           "type": "CHECKBOX",
           "defaultValue": "true"
         },{
