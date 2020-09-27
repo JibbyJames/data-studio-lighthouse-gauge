@@ -12,3 +12,11 @@
  ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/lh-gauge-card.png "Lighthouse Gauge")
 
 The three range values and colours can be configured to match whatever metric being visualised, as well as the font size and family. The background can be hidden, line thickness increased, and switch between rounded or flat edges. This can all be done in the Style tab of the visualisation.
+
+## Examples
+
+While the default styling matches what is shown in Lighthouse reports, the configuration options available make it possible to create many different styles of gauges:
+
+ ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/example-1.png "Fitness trackers")
+
+ ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/example-2.png "Thick bars")
