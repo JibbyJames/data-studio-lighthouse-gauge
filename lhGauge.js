@@ -135,7 +135,6 @@ function drawGauge(metricValue, metricLabel, gaugeOptions) {
  */
 function progress(value, gaugeOptions) {
 
-    var progressBackground = document.querySelector('#progress__background');
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
 
@@ -152,7 +151,7 @@ function progress(value, gaugeOptions) {
     var circumference = 2 * Math.PI * radius;
 
     // Set progress stroke offset to (0-360) value based on value/max figures.
-    var progress = (value - gaugeOptions.min) / gaugeOptions.max;
+    var progress = Math.min(((value - gaugeOptions.min) / gaugeOptions.max), 1.0);
     var dashoffset = circumference * (1 - progress);
     progressArc.style.strokeDasharray = circumference;
     progressArc.style.strokeDashoffset = dashoffset;
@@ -169,11 +168,15 @@ function progress(value, gaugeOptions) {
     }
 
     // Set additional style options.
-    progressBackground.style.opacity = (gaugeOptions['fillGaugeCenter']) ? 1.0 : 0.0;
+    //progressBackground.style.opacity = (gaugeOptions['fillGaugeCenter']) ? 1.0 : 0.0;
     progressArc.style.setProperty('stroke-linecap', ((gaugeOptions['roundedLineEdge']) ? 'round' : 'butt'));
 
     // Set metric value
-    progressValue.innerHTML = value;
+    if(gaugeOptions['fontCommas']) {
+        progressValue.innerHTML = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else {
+        progressValue.innerHTML = value;
+    }
 }
 
 /**
@@ -190,11 +193,25 @@ function updateProgressClasses(range, gaugeOptions) {
     var primaryColorKey = range + 'PrimaryColor';
     var secondaryColorKey = range + 'SecondaryColor';
 
-    progressBackground.style.fill = gaugeOptions[secondaryColorKey]
-    progressBackground.style.stroke = gaugeOptions[secondaryColorKey]
-    
-    progressArc.style.stroke = gaugeOptions[primaryColorKey]
-    progressValue.style.color = gaugeOptions[primaryColorKey]
+    progressArc.style.stroke = gaugeOptions[primaryColorKey];
+
+    if(gaugeOptions['fillGaugeCenter']) {
+        progressBackground.style.fill = gaugeOptions[secondaryColorKey]
+    } else {
+        progressBackground.style.fill = "rgba(255, 0, 0, 0.0)";
+    }
+
+    if(gaugeOptions['fillGaugeOuterRing']) {
+        progressBackground.style.stroke = gaugeOptions[secondaryColorKey]
+    } else {
+        progressBackground.style.stroke = "rgba(255, 0, 0, 0.0)";
+    }
+   
+    if(gaugeOptions['fontMatchColor']) {
+        progressValue.style.color = gaugeOptions[primaryColorKey]
+    } else {
+        progressValue.style.color = gaugeOptions['fontDefaultColor'];
+    }
 }
 
 /**
@@ -221,7 +238,10 @@ function getUiOptions(style) {
         max: style.max.value || style.max.defaultValue,
         precision: style.precision.value || style.precision.defaultValue,
         fontFamily: style.fontFamily.value || style.fontFamily.defaultValue,
-        fontSize: style.fontSize.value || style.fontSize.defaultValue
+        fontSize: style.fontSize.value || style.fontSize.defaultValue,
+        fontMatchColor: (style.fontMatchColor.value == undefined) ? style.fontMatchColor.defaultValue : style.fontMatchColor.value,
+        fontDefaultColor: (style.fontDefaultColor.value == undefined) ? style.fontDefaultColor.defaultValue : style.fontDefaultColor.value.color,
+        fontCommas: (style.fontCommas.value == undefined) ? style.fontCommas.defaultValue : style.fontCommas.value
     };
     return Object.assign(
         options,
@@ -271,6 +291,7 @@ function getVisualOptions(style) {
     let options = {};
 
     options['fillGaugeCenter'] = (style['fillGaugeCenter'].value == undefined) ? style['fillGaugeCenter'].defaultValue : style['fillGaugeCenter'].value;
+    options['fillGaugeOuterRing'] = (style['fillGaugeOuterRing'].value == undefined) ? style['fillGaugeOuterRing'].defaultValue : style['fillGaugeOuterRing'].value;
     options['roundedLineEdge'] = (style['roundedLineEdge'].value == undefined) ? style['roundedLineEdge'].defaultValue : style['roundedLineEdge'].value;
     options['lineThickness'] = style['lineThickness'].value || style['lineThickness'].defaultValue;
 

@@ -55,6 +55,11 @@
               "value": 3
             }
           ]
+        },{
+          "id": "fontCommas",
+          "label": "Comma Thousand Seperators",
+          "type": "CHECKBOX",
+          "defaultValue": "false"
         }
       ]
     },{
@@ -176,6 +181,16 @@
           "label": "Metric Value Font Size (px)",
           "type": "INTERVAL",
           "defaultValue": "40"
+        },{
+          "id": "fontMatchColor",
+          "label": "Match Font Color to Progress Color",
+          "type": "CHECKBOX",
+          "defaultValue": "true"
+        },{
+          "id": "fontDefaultColor",
+          "label": "Default Font Color",
+          "type": "FILL_COLOR",
+          "defaultValue": "#a7a7a7"
         }
       ]
     },{
@@ -185,6 +200,11 @@
         {
           "id": "fillGaugeCenter",
           "label": "Fill Gauge Centre",
+          "type": "CHECKBOX",
+          "defaultValue": "true"
+        },{
+          "id": "fillGaugeOuterRing",
+          "label": "Fill Gauge Outer Ring",
           "type": "CHECKBOX",
           "defaultValue": "true"
         },{

@@ -121,7 +121,6 @@ html {
     justify-content: center;
     flex-direction: column;
     font-family: var(--report-font-family-monospace);
-    /*font-size: calc(var(--gauge-circle-size) * 0.34 + 1.3px);*/
   }
 
   #progress__value.low {
