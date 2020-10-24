@@ -49,7 +49,7 @@ const ranges = {
 function drawChart(vizMsg) {
 
     clearChartDiv();
-    const metricLabel = vizMsg.fields.metricValue[0].name;
+    const metricType = vizMsg.fields.metricValue[0].type;
 
     let metricValue;
     if (vizMsg.tables.DEFAULT.length > 0) {
@@ -64,17 +64,17 @@ function drawChart(vizMsg) {
 
     const options = getUiOptions(vizMsg.style);
 
-    drawGauge(metricValue, metricLabel, options);
+    drawGauge(metricValue, metricType, options);
 }
 
 /**
  * Draws a Google Charts gauge.
  *
  * @param {number} metricValue The value of the metric.
- * @param {string} metricLabel The display name of the metric.
+ * @param {!String} metricType The metric type, which affects how it will be formatted.
  * @param {!Object} gaugeOptions The chart options based on user input.
  **/
-function drawGauge(metricValue, metricLabel, gaugeOptions) {
+function drawGauge(metricValue, metricType, gaugeOptions) {
 
     var gaugeDiv = document.getElementById(gaugeDivId);
     var gaugeDivExists = true && gaugeDiv
@@ -111,9 +111,6 @@ function drawGauge(metricValue, metricLabel, gaugeOptions) {
 
     var progressValueDiv = document.createElement('div');
     progressValueDiv.id = progressValueDivId;
-
-    metricValue = metricValue.toFixed(gaugeOptions.precision)
-    progressValueDiv.textContent = metricValue;
     progressValueDiv.style.fontFamily = gaugeOptions.fontFamily;
     progressValueDiv.style.fontSize = gaugeOptions.fontSize + "px";
 
@@ -124,16 +121,17 @@ function drawGauge(metricValue, metricLabel, gaugeOptions) {
         document.body.appendChild(gaugeDiv);
     }
 
-    progress(metricValue, gaugeOptions);
+    progress(metricValue, metricType, gaugeOptions);
 }
 
 /**
  * Sets the gauge to the correct value, updating the colours and progress arc accordingly.
  *
  * @param {!Float} value The current value of the data to display
+ * @param {!String} metricType The metric type, which affects how it will be formatted.
  * @param {!Object} gaugeOptions The object containing config values configured by the user.
  */
-function progress(value, gaugeOptions) {
+function progress(value, metricType, gaugeOptions) {
 
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
@@ -171,12 +169,12 @@ function progress(value, gaugeOptions) {
     //progressBackground.style.opacity = (gaugeOptions['fillGaugeCenter']) ? 1.0 : 0.0;
     progressArc.style.setProperty('stroke-linecap', ((gaugeOptions['roundedLineEdge']) ? 'round' : 'butt'));
 
-    // Set metric value
+    // Set metric value and format to given type.
     if(gaugeOptions['fontCommas']) {
-        progressValue.innerHTML = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    } else {
-        progressValue.innerHTML = value;
+        value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+    progressValue.innerHTML = formatValue(value, metricType, gaugeOptions);
+
 }
 
 /**
@@ -308,6 +306,44 @@ function getGaugeDimensions() {
         height: dscc.getHeight(),
         width: dscc.getWidth()
     };
+}
+
+/**
+ * Returns a formatted value based on the metric type to be displayed.
+ *
+ * @param {!Float} value The current value of the data to display
+ * @param {!String} metricType The metric type, which affects how it will be formatted.
+ * @param {!Object} gaugeOptions The object containing config values configured by the user.
+ */
+function formatValue(value, metricType, gaugeOptions) {
+
+    var result = undefined;
+
+    if(metricType.indexOf("CURRENCY") > -1) {
+        var currency = metricType.split("_ ")[1];
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency,          
+            minimumFractionDigits: gaugeOptions.precision,
+            maximumFractionDigits: gaugeOptions.precision
+          });
+        result = formatter.format(value);
+    } else {
+        switch(metricType) {
+            case "NUMBER":
+                result = value;
+                break;
+            case "PERCENT":    
+                result = (parseFloat(value) * 100).toFixed(gaugeOptions.precision) + "%";
+                break;
+            case "DURATION":
+                result = new Date(parseInt(value) * 1000).toISOString().substr(11, 8)
+                break;
+            default:
+                result = value;
+        }
+    }
+    return result;
 }
 
 dscc.subscribeToData(drawChart, {
