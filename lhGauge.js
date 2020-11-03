@@ -331,7 +331,7 @@ function formatValue(value, metricType, gaugeOptions) {
     } else {
         switch(metricType) {
             case "NUMBER":
-                result = value;
+                result = value.toFixed(gaugeOptions.precision);
                 break;
             case "PERCENT":    
                 result = (parseFloat(value) * 100).toFixed(gaugeOptions.precision) + "%";
@@ -340,7 +340,7 @@ function formatValue(value, metricType, gaugeOptions) {
                 result = new Date(parseInt(value) * 1000).toISOString().substr(11, 8)
                 break;
             default:
-                result = value;
+                result = value.toFixed(gaugeOptions.precision);
         }
     }
     return result;
