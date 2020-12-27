@@ -11,7 +11,9 @@
 
  ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/lh-gauge-card.png "Lighthouse Gauge")
 
-The three range values and colours can be configured to match whatever metric being visualised, as well as the font size and family. The background can be hidden, line thickness increased, and switch between rounded or flat edges. This can all be done in the Style tab of the visualisation.
+The three range values can be set by metric values which change depending on the data source, or set as static values in the Style tab which the gauge defaults to if no metric values are used. If range values overlap, the range which was evaluated first will be the colour that is shown (ranges are evaluated in the following order: low, mid, high).
+
+The range colours are configurable, as is the font size and font family. The background can be hidden, line thickness increased, and switch between rounded or flat edges. This can all be done in the Style tab of the visualisation.
 
 ## Examples
 

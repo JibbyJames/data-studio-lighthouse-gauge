@@ -1,14 +1,84 @@
 {
   "data": [
     {
-      "id": "concepts",
+      "id": "main",
+      "label": "Gauge Value",
       "elements": [
         {
           "id": "metricValue",
-          "label": "Metric",
           "type": "METRIC",
           "options": {
-            "min": 1,
+            "min": 0,
+            "max": 1
+          }
+        }
+      ]
+    },{
+      "id": "ranges",
+      "label": "Gauge Ranges",
+      "elements": [
+        {
+          "id": "min",
+          "label": "Minimum Gauge Value",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "lowFrom",
+          "label": "Low Range Start",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "lowTo",
+          "label": "Low Range End",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "midFrom",
+          "label": "Mid Range Start",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "midTo",
+          "label": "Mid Range End",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "highFrom",
+          "label": "High Range Start",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "highTo",
+          "label": "High Range End",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
+            "max": 1
+          }
+        },{
+          "id": "max",
+          "label": "Maximum Gauge Value",
+          "type": "METRIC",
+          "options": {
+            "min": 0,
             "max": 1
           }
         }
