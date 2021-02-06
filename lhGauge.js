@@ -54,7 +54,7 @@ function drawChart(vizMsg) {
 
     const metricType = vizMsg.fields.metricValue[0].type;
     const metricValue = getMetricValueFromTable(vizMsg, "metricValue");
-    if(!metricValue){
+    if(metricValue == null){
         return;
     }
 
