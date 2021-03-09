@@ -94,13 +94,13 @@
           "id": "min",
           "label": "Minimal gauge value",
           "type": "INTERVAL",
-          "defaultValue": "0"
+          "defaultValue": 0
         },
         {
           "id": "max",
           "label": "Maxmium gauge value",
           "type": "INTERVAL",
-          "defaultValue": "100"
+          "defaultValue": 100
         },
         {
           "id": "precision",
@@ -129,7 +129,7 @@
           "id": "fontCommas",
           "label": "Comma Thousand Seperators",
           "type": "CHECKBOX",
-          "defaultValue": "false"
+          "defaultValue": false
         }
       ]
     },{
@@ -152,13 +152,13 @@
           "id": "lowFrom",
           "label": "Range start",
           "type": "INTERVAL",
-          "defaultValue": "0"
+          "defaultValue": 0
         },
         {
           "id": "lowTo",
           "label": "Range end",
           "type": "INTERVAL",
-          "defaultValue": "49"
+          "defaultValue": 49
         }
       ]
     },{
@@ -181,13 +181,13 @@
           "id": "midFrom",
           "label": "Range start",
           "type": "INTERVAL",
-          "defaultValue": "50"
+          "defaultValue": 50
         },
         {
           "id": "midTo",
           "label": "Range end",
           "type": "INTERVAL",
-          "defaultValue": "89"
+          "defaultValue": 89
         }
       ]
     },{
@@ -210,13 +210,13 @@
           "id": "highFrom",
           "label": "Range start",
           "type": "INTERVAL",
-          "defaultValue": "90"
+          "defaultValue": 90
         },
         {
           "id": "highTo",
           "label": "Range end",
           "type": "INTERVAL",
-          "defaultValue": "100"
+          "defaultValue": 100
         }
       ]
     },{
@@ -250,12 +250,12 @@
           "id": "fontSize",
           "label": "Metric Value Font Size (px)",
           "type": "INTERVAL",
-          "defaultValue": "40"
+          "defaultValue": 40
         },{
           "id": "fontMatchColor",
           "label": "Match Font Color to Progress Color",
           "type": "CHECKBOX",
-          "defaultValue": "true"
+          "defaultValue": true
         },{
           "id": "fontDefaultColor",
           "label": "Default Font Color",
@@ -271,22 +271,22 @@
           "id": "fillGaugeCenter",
           "label": "Fill Gauge Centre",
           "type": "CHECKBOX",
-          "defaultValue": "true"
+          "defaultValue": true
         },{
           "id": "fillGaugeOuterRing",
           "label": "Fill Gauge Outer Ring",
           "type": "CHECKBOX",
-          "defaultValue": "true"
+          "defaultValue": true
         },{
           "id": "roundedLineEdge",
           "label": "Progress Line Rounded",
           "type": "CHECKBOX",
-          "defaultValue": "true"
+          "defaultValue": true
         },{
           "id": "lineThickness",
           "label": "Progress Line Thickness",
           "type": "INTERVAL",
-          "defaultValue": "12"
+          "defaultValue": 12
         }
       ]
     }
