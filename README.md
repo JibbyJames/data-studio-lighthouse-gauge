@@ -13,7 +13,7 @@
 
 The three range values can be set by metric values which change depending on the data source, or set as static values in the Style tab which the gauge defaults to if no metric values are used. If range values overlap, the range which was evaluated first will be the colour that is shown (ranges are evaluated in the following order: low, mid, high).
 
-The range colours are configurable, as is the font size and font family. The background can be hidden, line thickness increased, and switch between rounded or flat edges. This can all be done in the Style tab of the visualisation.
+The range colours are configurable, as is the font size and font family. The background can be hidden, line thickness increased, and switch between rounded or flat edges. The starting point, arc length, and progress direction can also all be changed. This can all be done in the Style tab of the visualisation.
 
 ## Examples
 
@@ -22,3 +22,5 @@ While the default styling matches what is shown in Lighthouse reports, the confi
  ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/example-1.png "Fitness trackers")
 
  ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/example-2.png "Thick bars")
+
+  ![alt text](https://raw.githubusercontent.com/JibbyJames/data-studio-lighthouse-gauge/master/example-3.png "Partial gauge")
