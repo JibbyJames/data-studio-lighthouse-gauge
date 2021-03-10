@@ -283,10 +283,33 @@
           "type": "CHECKBOX",
           "defaultValue": true
         },{
+          "id": "anticlockwiseProgress",
+          "label": "Progress Anti-clockwise",
+          "type": "CHECKBOX",
+          "defaultValue": false
+        },{
           "id": "lineThickness",
           "label": "Progress Line Thickness",
           "type": "INTERVAL",
           "defaultValue": 12
+        },{
+          "id": "progressStartingPoint",
+          "label": "Progress Starting Point (0-359°)",
+          "type": "INTERVAL",
+          "defaultValue": 0,
+          "options": {
+            "min": 0,
+            "max": 359
+          }
+        },{
+          "id": "progressArcLength",
+          "label": "Progress Arc Length (1-360°)",
+          "type": "INTERVAL",
+          "defaultValue": 360,
+          "options": {
+            "min": 1,
+            "max": 360
+          }
         }
       ]
     }

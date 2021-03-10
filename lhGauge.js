@@ -106,7 +106,9 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     var gaugeDiv = document.getElementById(gaugeDivId);
     var gaugeDivExists = true && gaugeDiv
 
-    var lineWidth = gaugeOptions['lineThickness']
+    var lineWidth = gaugeOptions['lineThickness'];
+    var rotation = gaugeOptions['progressStartingPoint'];
+    var lineCap = gaugeOptions['roundedLineEdge'];
 
     if (!gaugeDivExists) {
         gaugeDiv = document.createElement('div');
@@ -125,6 +127,9 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     progressBackgroundCircle.setAttribute("cy", (SVG_SIZE/4));
     progressBackgroundCircle.setAttribute("r", ((SVG_SIZE/4) - (lineWidth/2)));
     progressBackgroundCircle.setAttribute("stroke-width", lineWidth);
+    progressBackgroundCircle.style.setProperty('transform-box', 'fill-box');
+    progressBackgroundCircle.style.setProperty('transform-origin', 'center');
+    progressBackgroundCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
 
     var progressArcCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     progressArcCircle.id = progressArcCircleId;
@@ -132,6 +137,10 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     progressArcCircle.setAttribute("cy", (SVG_SIZE/4));
     progressArcCircle.setAttribute("r", ((SVG_SIZE/4) - (lineWidth/2)));
     progressArcCircle.setAttribute("stroke-width", lineWidth);
+    progressArcCircle.style.setProperty('transform-box', 'fill-box');
+    progressArcCircle.style.setProperty('transform-origin', 'center');
+    progressArcCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
+    progressArcCircle.style.setProperty('stroke-linecap', (lineCap ? 'round' : 'butt'));
 
     progressSvg.appendChild(progressBackgroundCircle);
     progressSvg.appendChild(progressArcCircle);
@@ -160,6 +169,7 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
  */
 function progress(value, metricType, gaugeOptions) {
 
+    var progressBackground = document.querySelector('#progress__background');
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
 
@@ -174,12 +184,28 @@ function progress(value, metricType, gaugeOptions) {
     var lineWidth = gaugeOptions['lineThickness']
     var radius = (SVG_SIZE/4) - (lineWidth/2)
     var circumference = 2 * Math.PI * radius;
-
-    // Set progress stroke offset to (0-360) value based on value/max figures.
-    var progress = Math.min(((value - gaugeOptions.min) / gaugeOptions.max), 1.0);
-    var dashoffset = circumference * (1 - progress);
     progressArc.style.strokeDasharray = circumference;
-    progressArc.style.strokeDashoffset = dashoffset;
+    progressBackground.style.strokeDasharray = circumference;
+
+    // Set initial progress value to (0-360) value based on value/max figures.
+    var progress = Math.min(((value - gaugeOptions.min) / gaugeOptions.max), 1.0);
+
+    // Reduce progress given size chosen in style.
+    progress = progress * (gaugeOptions['progressArcLength'] / 360); 
+
+    // Set the progress offset based on progress and circumference value.
+    var dashoffset = circumference * (1 - progress);
+    var backgroundOffset = circumference * (1 - (gaugeOptions['progressArcLength'] / 360))
+
+    // Check if offset should be reversed for anti-clockwise rotation
+    if(gaugeOptions['anticlockwiseProgress']) {
+        dashoffset = dashoffset * -1;
+        backgroundOffset = backgroundOffset * -1;
+    }
+
+    // Set the offset value to the circle arc
+    progressArc.style.strokeDashoffset = dashoffset;   
+    progressBackground.style.strokeDashoffset = backgroundOffset;
 
     // Change guage colours depending on value
     if (value >= lowFrom && value <= lowTo) {
@@ -191,9 +217,6 @@ function progress(value, metricType, gaugeOptions) {
     } else {
         updateProgressClasses(ranges.DEFAULT, gaugeOptions);
     }
-
-    // Set additional style options.
-    progressArc.style.setProperty('stroke-linecap', ((gaugeOptions['roundedLineEdge']) ? 'round' : 'butt'));
 
     progressValue.innerHTML = formatValue(value, metricType, gaugeOptions);
 
@@ -321,7 +344,10 @@ function getVisualOptions(style) {
     options['fillGaugeCenter'] = (style['fillGaugeCenter'].value == undefined) ? style['fillGaugeCenter'].defaultValue : style['fillGaugeCenter'].value;
     options['fillGaugeOuterRing'] = (style['fillGaugeOuterRing'].value == undefined) ? style['fillGaugeOuterRing'].defaultValue : style['fillGaugeOuterRing'].value;
     options['roundedLineEdge'] = (style['roundedLineEdge'].value == undefined) ? style['roundedLineEdge'].defaultValue : style['roundedLineEdge'].value;
+    options['anticlockwiseProgress'] = style['anticlockwiseProgress'].value || style['anticlockwiseProgress'].defaultValue;
     options['lineThickness'] = style['lineThickness'].value || style['lineThickness'].defaultValue;
+    options['progressStartingPoint'] = style['progressStartingPoint'].value || style['progressStartingPoint'].defaultValue;
+    options['progressArcLength'] = style['progressArcLength'].value || style['progressArcLength'].defaultValue;
 
     return options;
 }
