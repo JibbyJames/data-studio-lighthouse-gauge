@@ -91,13 +91,13 @@
       "label": "Gauge Values",
       "elements":[
         {
-          "id": "min",
+          "id": "styleMin",
           "label": "Minimal gauge value",
           "type": "INTERVAL",
           "defaultValue": 0
         },
         {
-          "id": "max",
+          "id": "styleMax",
           "label": "Maxmium gauge value",
           "type": "INTERVAL",
           "defaultValue": 100
@@ -110,19 +110,19 @@
           "options": [
             {
               "label": "0",
-              "value": 0
+              "value": "0"
             },
             {
               "label": "1",
-              "value": 1
+              "value": "1"
             },
             {
               "label": "2",
-              "value": 2
+              "value": "2"
             },
             {
               "label": "3",
-              "value": 3
+              "value": "3"
             }
           ]
         },{
@@ -149,13 +149,13 @@
           "defaultValue": "#ffeeec"
         },
         {
-          "id": "lowFrom",
+          "id": "lowFromStyle",
           "label": "Range start",
           "type": "INTERVAL",
           "defaultValue": 0
         },
         {
-          "id": "lowTo",
+          "id": "lowToStyle",
           "label": "Range end",
           "type": "INTERVAL",
           "defaultValue": 49
@@ -178,13 +178,13 @@
           "defaultValue": "#fff6e6"
         },
         {
-          "id": "midFrom",
+          "id": "midFromStyle",
           "label": "Range start",
           "type": "INTERVAL",
           "defaultValue": 50
         },
         {
-          "id": "midTo",
+          "id": "midToStyle",
           "label": "Range end",
           "type": "INTERVAL",
           "defaultValue": 89
@@ -207,13 +207,13 @@
           "defaultValue": "#e7faf0"
         },
         {
-          "id": "highFrom",
+          "id": "highFromStyle",
           "label": "Range start",
           "type": "INTERVAL",
           "defaultValue": 90
         },
         {
-          "id": "highTo",
+          "id": "highToStyle",
           "label": "Range end",
           "type": "INTERVAL",
           "defaultValue": 100

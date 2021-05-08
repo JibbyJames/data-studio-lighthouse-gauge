@@ -39,6 +39,8 @@ const progressBackgroundCircleId = "progress__background";
 const progressArcCircleId = "progress__arc";
 const progressValueDivId = "progress__value";
 
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 const SVG_SIZE = 240;
 
 const ranges = {
@@ -128,8 +130,6 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     progressBackgroundCircle.setAttribute("r", ((SVG_SIZE/4) - (lineWidth/2)));
     progressBackgroundCircle.setAttribute("stroke-width", lineWidth);
     progressBackgroundCircle.style.setProperty('transform-box', 'fill-box');
-    progressBackgroundCircle.style.setProperty('transform-origin', 'center');
-    progressBackgroundCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
 
     var progressArcCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     progressArcCircle.id = progressArcCircleId;
@@ -138,9 +138,19 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     progressArcCircle.setAttribute("r", ((SVG_SIZE/4) - (lineWidth/2)));
     progressArcCircle.setAttribute("stroke-width", lineWidth);
     progressArcCircle.style.setProperty('transform-box', 'fill-box');
-    progressArcCircle.style.setProperty('transform-origin', 'center');
-    progressArcCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
     progressArcCircle.style.setProperty('stroke-linecap', (lineCap ? 'round' : 'butt'));
+
+    // Rotations are weird in safari and are affected by stroke width
+    var transformOriginCenter = "center"
+    if(isSafari) {
+        var realCenter = (SVG_SIZE/4);
+        var safariCenter = realCenter - (lineWidth/2) - (realCenter*0.15);
+        var transformOriginCenter = safariCenter + "px " + safariCenter + "px";
+    }
+    progressBackgroundCircle.style.setProperty('transform-origin', transformOriginCenter);
+    progressBackgroundCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
+    progressArcCircle.style.setProperty('transform-origin', transformOriginCenter);
+    progressArcCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
 
     progressSvg.appendChild(progressBackgroundCircle);
     progressSvg.appendChild(progressArcCircle);
@@ -158,6 +168,8 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     }
 
     progress(metricValue, metricType, gaugeOptions);
+
+    setGlobalStyles();
 }
 
 /**
@@ -173,12 +185,12 @@ function progress(value, metricType, gaugeOptions) {
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
 
-    var lowFrom = gaugeOptions.lowFrom
-    var lowTo = gaugeOptions.lowTo
-    var midFrom = gaugeOptions.midFrom
-    var midTo = gaugeOptions.midTo
-    var highFrom = gaugeOptions.highFrom
-    var highTo = gaugeOptions.highTo
+    var lowFrom = gaugeOptions.lowFromStyle
+    var lowTo = gaugeOptions.lowToStyle
+    var midFrom = gaugeOptions.midFromStyle
+    var midTo = gaugeOptions.midToStyle
+    var highFrom = gaugeOptions.highFromStyle
+    var highTo = gaugeOptions.highToStyle
 
     // Line thickness alters required circle radius
     var lineWidth = gaugeOptions['lineThickness']
@@ -197,8 +209,10 @@ function progress(value, metricType, gaugeOptions) {
     var dashoffset = circumference * (1 - progress);
     var backgroundOffset = circumference * (1 - (gaugeOptions['progressArcLength'] / 360))
 
-    // Check if offset should be reversed for anti-clockwise rotation
-    if(gaugeOptions['anticlockwiseProgress']) {
+    // Check if offset should be reversed for anti-clockwise rotation.
+    // This feature is disabled for Safari as it doesn't support negative offsets.
+    // The offset method is required to work with the other transforms happening.
+    if(gaugeOptions['anticlockwiseProgress'] && !isSafari) {
         dashoffset = dashoffset * -1;
         backgroundOffset = backgroundOffset * -1;
     }
@@ -281,9 +295,9 @@ function getUiOptions(vizMsg) {
     const style = vizMsg.style;
 
     let options = {
-        min: getMetricValueFromTable(vizMsg, "min") || style.min.value || style.min.defaultValue,
-        max: getMetricValueFromTable(vizMsg, "max") || style.max.value || style.max.defaultValue,
-        precision: style.precision.value || style.precision.defaultValue,
+        min: getMetricValueFromTable(vizMsg, "styleMin") || style.styleMin.value || style.styleMin.defaultValue,
+        max: getMetricValueFromTable(vizMsg, "styleMax") || style.styleMax.value || style.styleMax.defaultValue,
+        precision: parseInt(style.precision.value || style.precision.defaultValue),
         fontFamily: style.fontFamily.value || style.fontFamily.defaultValue,
         fontSize: style.fontSize.value || style.fontSize.defaultValue,
         fontMatchColor: (style.fontMatchColor.value == undefined) ? style.fontMatchColor.defaultValue : style.fontMatchColor.value,
@@ -316,8 +330,8 @@ function getRangeOptions(range, vizMsg) {
     let options = {};
     const primaryColorKey = range + 'PrimaryColor';
     const secondaryColorKey = range + 'SecondaryColor';
-    const fromKey = range + 'From';
-    const toKey = range + 'To';
+    const fromKey = range + 'FromStyle';
+    const toKey = range + 'ToStyle';
 
     options[primaryColorKey] = style[primaryColorKey].value && style[primaryColorKey].value.color
         || style[primaryColorKey].defaultValue;
@@ -406,6 +420,34 @@ function formatValue(value, metricType, gaugeOptions) {
         }
     }
     return result;
+}
+
+/**
+ * Set some styling programatically to get around Safari CSP issues.
+ */
+ function setGlobalStyles() {
+
+    var elem = document.querySelector('body');
+    elem.style.overflow = 'hidden';
+
+    var elem = document.querySelector('#progress');
+    elem.style.transform = 'rotate(-90deg)';
+
+    var elem = document.querySelector('#progress__arc');
+    elem.style.fill = 'none';
+
+    var elem = document.querySelector('#progress__value');
+    elem.style.position = 'absolute';
+    elem.style.top = "-15px";
+    elem.style.right = "0";
+    elem.style.bottom = "0";
+    elem.style.left = "0";
+    elem.style.margin = "auto";
+    elem.style.display = "flex";
+    elem.style.alignItems = "center";
+    elem.style.justifyContent = "center";
+    elem.style.flexDirection = "column";
+    elem.style.fontFamily = "var(--report-font-family-monospace);";
 }
 
 dscc.subscribeToData(drawChart, {
