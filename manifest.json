@@ -12,8 +12,8 @@
     "description": "Gauge in style of Lighthouse reports created with JS and CSS",
     "iconUrl": "https://storage.googleapis.com/jjbuckley-datastudio/lighthouse-gauge/icon.png",
     "resource": {
-      "config": "gs://jjbuckley-datastudio-dev/lighthouse-gauge/lhGauge.json",
-      "js": "gs://jjbuckley-datastudio-dev/lighthouse-gauge/lhGauge.js"
+      "config": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.json",
+      "js": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.js"
     }
   }]
 }
