@@ -185,12 +185,12 @@ function progress(value, metricType, gaugeOptions) {
     var progressArc = document.querySelector('#progress__arc');
     var progressValue = document.querySelector('#progress__value');
 
-    var lowFrom = gaugeOptions.lowFromStyle
-    var lowTo = gaugeOptions.lowToStyle
-    var midFrom = gaugeOptions.midFromStyle
-    var midTo = gaugeOptions.midToStyle
-    var highFrom = gaugeOptions.highFromStyle
-    var highTo = gaugeOptions.highToStyle
+    var lowFrom = gaugeOptions.lowFrom
+    var lowTo = gaugeOptions.lowTo
+    var midFrom = gaugeOptions.midFrom
+    var midTo = gaugeOptions.midTo
+    var highFrom = gaugeOptions.highFrom
+    var highTo = gaugeOptions.highTo
 
     // Line thickness alters required circle radius
     var lineWidth = gaugeOptions['lineThickness']
@@ -295,8 +295,8 @@ function getUiOptions(vizMsg) {
     const style = vizMsg.style;
 
     let options = {
-        min: getMetricValueFromTable(vizMsg, "styleMin") || style.styleMin.value || style.styleMin.defaultValue,
-        max: getMetricValueFromTable(vizMsg, "styleMax") || style.styleMax.value || style.styleMax.defaultValue,
+        min: getMetricValueFromTable(vizMsg, "min") || style.styleMin.value || style.styleMin.defaultValue,
+        max: getMetricValueFromTable(vizMsg, "max") || style.styleMax.value || style.styleMax.defaultValue,
         precision: parseInt(style.precision.value || style.precision.defaultValue),
         fontFamily: style.fontFamily.value || style.fontFamily.defaultValue,
         fontSize: style.fontSize.value || style.fontSize.defaultValue,
@@ -330,17 +330,20 @@ function getRangeOptions(range, vizMsg) {
     let options = {};
     const primaryColorKey = range + 'PrimaryColor';
     const secondaryColorKey = range + 'SecondaryColor';
-    const fromKey = range + 'FromStyle';
-    const toKey = range + 'ToStyle';
+    const fromKey = range + 'From';
+    const toKey = range + 'To';
+    const fromKeyStyle = fromKey + 'Style';
+    const toKeyStyle = toKey + 'Style';
 
     options[primaryColorKey] = style[primaryColorKey].value && style[primaryColorKey].value.color
         || style[primaryColorKey].defaultValue;
     options[secondaryColorKey] = style[secondaryColorKey].value && style[secondaryColorKey].value.color
         || style[secondaryColorKey].defaultValue;
 
-    if (style[fromKey] && style[toKey]) {
-        options[fromKey] = getMetricValueFromTable(vizMsg, fromKey) || style[fromKey].value || style[fromKey].defaultValue;
-        options[toKey] = getMetricValueFromTable(vizMsg, toKey) || style[toKey].value || style[toKey].defaultValue;
+    if (style[fromKeyStyle] && style[toKeyStyle]) {
+        // Prioritize the metric values over the style values.
+        options[fromKey] = getMetricValueFromTable(vizMsg, fromKey) || style[fromKeyStyle].value || style[fromKeyStyle].defaultValue;
+        options[toKey] = getMetricValueFromTable(vizMsg, toKey) || style[toKeyStyle].value || style[toKeyStyle].defaultValue;
     }
 
     return options;
