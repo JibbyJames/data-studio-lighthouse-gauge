@@ -62,13 +62,34 @@ function drawChart(vizMsg) {
 
     clearChartDiv();
 
+    var missingData = false;
+
+    // Check for missing data. Will require some UI changes if so.
+    if(vizMsg.tables.DEFAULT.length < 1 || !vizMsg.tables.DEFAULT[0].metricValue[0]) {
+
+        missingData = true;
+        
+        // Depending on missing data option we need to alter ranges to show default colours
+        var missingDataStyle = vizMsg.style.missingData.value;
+        if(missingDataStyle !== 0) {
+            vizMsg.tables.DEFAULT[0] = {
+                'highFrom': [1],
+                'highTo': [1],
+                'lowFrom': [1],
+                'lowTo': [1],
+                'max': [1],
+                'midFrom': [1],
+                'midTo': [1] 
+            }        
+        }
+        
+        // Set metric value to 0, will display chosen value later
+        vizMsg.tables.DEFAULT[0]['metricValue'] = [0];
+    }
+    
     const metricType = vizMsg.fields.metricValue[0].type;
     const metricValue = getMetricValueFromTable(vizMsg, "metricValue");
-    if(metricValue == null){
-        return;
-    }
-
-    const options = getUiOptions(vizMsg);
+    const options = getUiOptions(vizMsg, missingData);
 
     drawGauge(metricValue, metricType, options);
 }
@@ -149,6 +170,7 @@ function drawGauge(metricValue, metricType, gaugeOptions) {
     }
     progressBackgroundCircle.style.setProperty('transform-origin', transformOriginCenter);
     progressBackgroundCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
+    progressBackgroundCircle.style.setProperty('stroke-linecap', (lineCap ? 'round' : 'butt'));
     progressArcCircle.style.setProperty('transform-origin', transformOriginCenter);
     progressArcCircle.style.setProperty('transform', 'rotate(' + rotation + 'deg)');
 
@@ -222,9 +244,9 @@ function progress(value, metricType, gaugeOptions) {
     progressBackground.style.strokeDashoffset = backgroundOffset;
 
     // Change guage colours depending on value
-    if (value >= lowFrom && value <= lowTo) {
+    if (value >= lowFrom && value < lowTo) {
         updateProgressClasses(ranges.LOW, gaugeOptions);
-    } else if (value >= midFrom && value <= midTo) {
+    } else if (value >= midFrom && value < midTo) {
         updateProgressClasses(ranges.MIDDLE, gaugeOptions);
     } else if (value >= highFrom && value <= highTo) {
         updateProgressClasses(ranges.HIGH, gaugeOptions);
@@ -288,9 +310,10 @@ function clearChartDiv() {
  *
  * @param {!Object} vizMsg The post message from Data Studio that contains the
  * the user selected metric, style options and the data to render.
+ * @param {|Boolean} missingData Whether there is missing data.
  * @return {!Object} Config object containing values used to draw gauge.
  */
-function getUiOptions(vizMsg) {
+function getUiOptions(vizMsg, missingData) {
 
     const style = vizMsg.style;
 
@@ -302,7 +325,9 @@ function getUiOptions(vizMsg) {
         fontSize: style.fontSize.value || style.fontSize.defaultValue,
         fontMatchColor: (style.fontMatchColor.value == undefined) ? style.fontMatchColor.defaultValue : style.fontMatchColor.value,
         fontDefaultColor: (style.fontDefaultColor.value == undefined) ? style.fontDefaultColor.defaultValue : style.fontDefaultColor.value.color,
-        fontCommas: (style.fontCommas.value == undefined) ? style.fontCommas.defaultValue : style.fontCommas.value
+        fontCommas: (style.fontCommas.value == undefined) ? style.fontCommas.defaultValue : style.fontCommas.value,
+        missingData: missingData,
+        missingDataStyle: (style.missingData.value == undefined) ? style.missingData.defaultValue : style.missingData.value
     };
     return Object.assign(
         options,
@@ -392,7 +417,9 @@ function formatValue(value, metricType, gaugeOptions) {
 
     var result = undefined;
 
-    if(metricType.indexOf("CURRENCY") > -1) {
+    if(gaugeOptions.missingData && gaugeOptions.missingDataStyle != 0) {
+        result = gaugeOptions.missingDataStyle;
+    } else if(metricType.indexOf("CURRENCY") > -1) {
         var currency = metricType.split("_ ")[1];
         var formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',

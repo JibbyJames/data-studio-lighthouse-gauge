@@ -312,6 +312,35 @@
           }
         }
       ]
+    },{
+      "id": "missingDataSection",
+      "label": "Missing Data",
+      "elements":[
+        {
+          "id": "missingData",
+          "label": "",
+          "type": "SELECT_SINGLE",
+          "defaultValue": "No data",
+          "options": [
+            {
+              "label": "Show \"No data\"",
+              "value": "No data"
+            },
+            {
+              "label": "Show \"0\"",
+              "value": "0"
+            },
+            {
+              "label": "Show \"-\"",
+              "value": "-"
+            },
+            {
+              "label": "Show \"null\"",
+              "value": "null"
+            }
+          ]
+        }
+      ]  
     }
   ]
 }
