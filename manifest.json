@@ -1,16 +1,16 @@
 {
   "name": "Lighthouse Gauge",
   "organization": "James Buckley",
-  "description": "Lighthouse Gauge",
-  "logoUrl": "gs://jjbuckley-datastudio/lighthouse-gauge/cover.png",
-  "packageUrl": "https://github.com/JibbyJames/data-studio-lighthouse-gauge",
+  "description": "A highly customisable gauge originally based on those featured in the site speed auditing tool Lighthouse.",
+  "logoUrl": "gs://jjbuckley-datastudio/lighthouse-gauge/icon_800x600.png",
+  "packageUrl": "https://datastudio.google.com/reporting/bf0d5276-af97-4c9f-8bbe-068edbf79cbd",
   "supportUrl": "https://github.com/JibbyJames/data-studio-lighthouse-gauge",
   "devMode": false,
   "components": [{
     "id": "lhGauge",
     "name": "Lighthouse Gauge",
-    "description": "Gauge in style of Lighthouse reports created with JS and CSS",
-    "iconUrl": "https://storage.googleapis.com/jjbuckley-datastudio/lighthouse-gauge/icon.png",
+    "description": "A highly customisable gauge originally based on those featured in the site speed auditing tool Lighthouse.",
+    "iconUrl": "https://storage.googleapis.com/jjbuckley-datastudio/lighthouse-gauge/icon_800x600.png",
     "resource": {
       "config": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.json",
       "js": "gs://jjbuckley-datastudio/lighthouse-gauge/lhGauge.js"
