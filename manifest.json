@@ -1,10 +1,13 @@
 {
   "name": "Lighthouse Gauge",
   "organization": "James Buckley",
+  "organizationUrl":"https://www.jibbyjames.com",
   "description": "A highly customisable gauge based on those featured in Lighthouse auditing reports.",
-  "logoUrl": "gs://jjbuckley-datastudio/lighthouse-gauge/icon_800x600.png",
+  "logoUrl": "https://storage.googleapis.com/jjbuckley-datastudio/lighthouse-gauge/icon_800x600.png",
   "packageUrl": "https://datastudio.google.com/reporting/bf0d5276-af97-4c9f-8bbe-068edbf79cbd",
-  "supportUrl": "https://github.com/JibbyJames/data-studio-lighthouse-gauge",
+  "supportUrl": "https://github.com/JibbyJames/data-studio-lighthouse-gauge/issues",
+  "privacyPolicyUrl": "https://datastudio.google.com/u/0/reporting/bf0d5276-af97-4c9f-8bbe-068edbf79cbd/page/p_wm31vmbzmc",
+  "termsOfServiceUrl": "https://datastudio.google.com/u/0/reporting/bf0d5276-af97-4c9f-8bbe-068edbf79cbd/page/p_3zf32tbzmc",
   "devMode": false,
   "components": [{
     "id": "lhGauge",

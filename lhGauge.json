@@ -127,7 +127,7 @@
           ]
         },{
           "id": "fontCommas",
-          "label": "Comma Thousand Seperators",
+          "label": "Comma Thousand Separators",
           "type": "CHECKBOX",
           "defaultValue": false
         }
@@ -158,7 +158,7 @@
           "id": "lowToStyle",
           "label": "Range end",
           "type": "INTERVAL",
-          "defaultValue": 49
+          "defaultValue": 50
         }
       ]
     },{
@@ -187,7 +187,7 @@
           "id": "midToStyle",
           "label": "Range end",
           "type": "INTERVAL",
-          "defaultValue": 89
+          "defaultValue": 90
         }
       ]
     },{
