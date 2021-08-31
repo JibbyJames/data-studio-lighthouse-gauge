@@ -134,7 +134,7 @@
       ]
     },{
       "id": "low",
-      "label": "Low Section",
+      "label": "Gauge Range: Low",
       "elements":[
         {
           "id": "lowPrimaryColor",
@@ -163,7 +163,7 @@
       ]
     },{
       "id": "mid",
-      "label": "Mid Section",
+      "label": "Gauge Range: Mid",
       "elements":[
         {
           "id": "midPrimaryColor",
@@ -192,7 +192,7 @@
       ]
     },{
       "id": "high",
-      "label": "High Section",
+      "label": "Gauge Range: High",
       "elements":[
         {
           "id": "highPrimaryColor",
