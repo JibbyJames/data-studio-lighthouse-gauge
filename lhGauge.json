@@ -221,7 +221,7 @@
       ]
     },{
       "id": "default",
-      "label": "Default Section",
+      "label": "Gauge Range: Default",
       "elements":[
         {
           "id": "defaultPrimaryColor",
