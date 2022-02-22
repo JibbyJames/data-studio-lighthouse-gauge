@@ -221,8 +221,11 @@ function progress(value, metricType, gaugeOptions) {
     progressArc.style.strokeDasharray = circumference;
     progressBackground.style.strokeDasharray = circumference;
 
-    // Set initial progress value to (0-360) value based on value/max figures.
-    var progress = Math.min(((value - gaugeOptions.min) / gaugeOptions.max), 1.0);
+    // Determine progress value based on value/min/max figures.
+    var progress = (value - gaugeOptions.min) / (gaugeOptions.max - gaugeOptions.min);
+
+    // Ensure progress is between 0-100%
+    progress = Math.max(Math.min(progress, 1.0), 0.0);
 
     // Reduce progress given size chosen in style.
     progress = progress * (gaugeOptions['progressArcLength'] / 360); 
@@ -318,8 +321,8 @@ function getUiOptions(vizMsg, missingData) {
     const style = vizMsg.style;
 
     let options = {
-        min: getMetricValueFromTable(vizMsg, "min") || style.styleMin.value || style.styleMin.defaultValue,
-        max: getMetricValueFromTable(vizMsg, "max") || style.styleMax.value || style.styleMax.defaultValue,
+        min: getMetricValueFromTable(vizMsg, "min") === 0 ? 0 : getMetricValueFromTable(vizMsg, "min") || (style.styleMin.value === 0 ? 0 : style.styleMin.value || style.styleMin.defaultValue),
+        max: getMetricValueFromTable(vizMsg, "max") === 0 ? 0 : getMetricValueFromTable(vizMsg, "max") || (style.styleMax.value === 0 ? 0 : style.styleMax.value || style.styleMax.defaultValue),
         precision: parseInt(style.precision.value || style.precision.defaultValue),
         fontFamily: style.fontFamily.value || style.fontFamily.defaultValue,
         fontSize: style.fontSize.value || style.fontSize.defaultValue,
