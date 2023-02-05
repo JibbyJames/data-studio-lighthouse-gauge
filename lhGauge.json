@@ -127,7 +127,12 @@
           ]
         },{
           "id": "fontCommas",
-          "label": "Comma Thousand Separators",
+          "label": "Thousand Separators",
+          "type": "CHECKBOX",
+          "defaultValue": false
+        },{
+          "id": "decimalSeparators",
+          "label": "EU Decimal Format",
           "type": "CHECKBOX",
           "defaultValue": false
         }

@@ -329,6 +329,7 @@ function getUiOptions(vizMsg, missingData) {
         fontMatchColor: (style.fontMatchColor.value == undefined) ? style.fontMatchColor.defaultValue : style.fontMatchColor.value,
         fontDefaultColor: (style.fontDefaultColor.value == undefined) ? style.fontDefaultColor.defaultValue : style.fontDefaultColor.value.color,
         fontCommas: (style.fontCommas.value == undefined) ? style.fontCommas.defaultValue : style.fontCommas.value,
+        decimalSeparators: (style.decimalSeparators.value == undefined) ? style.decimalSeparators.defaultValue : style.decimalSeparators.value,
         missingData: missingData,
         missingDataStyle: (style.missingData.value == undefined) ? style.missingData.defaultValue : style.missingData.value
     };
@@ -422,34 +423,40 @@ function formatValue(value, metricType, gaugeOptions) {
 
     if(gaugeOptions.missingData && gaugeOptions.missingDataStyle != 0) {
         result = gaugeOptions.missingDataStyle;
-    } else if(metricType.indexOf("CURRENCY") > -1) {
-        var currency = metricType.split("_ ")[1];
-        var formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currency,          
-            minimumFractionDigits: gaugeOptions.precision,
-            maximumFractionDigits: gaugeOptions.precision
-          });
-        result = formatter.format(value);
     } else {
-        switch(metricType) {
-            case "NUMBER":
-                result = value.toFixed(gaugeOptions.precision);
-
-                // Apply commas to number formats only.
-                if(gaugeOptions['fontCommas']) {
-                    result = result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                }
-
-                break;
-            case "PERCENT":    
-                result = (parseFloat(value) * 100).toFixed(gaugeOptions.precision) + "%";
-                break;
-            case "DURATION":
-                result = new Date(parseInt(value) * 1000).toISOString().substr(11, 8)
-                break;
-            default:
-                result = value.toFixed(gaugeOptions.precision);
+    
+        var locale = gaugeOptions.decimalSeparators ? 'es-ES' : 'en-US';
+        var useGrouping = gaugeOptions['fontCommas'] == true;
+    
+        if(metricType.indexOf("CURRENCY") > -1) {
+            var currency = metricType.split("_ ")[1];            
+            var formatter = new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currency,          
+                minimumFractionDigits: gaugeOptions.precision,
+                maximumFractionDigits: gaugeOptions.precision,
+                useGrouping: useGrouping
+              });
+            result = formatter.format(value);
+        } else {
+        
+            var formatter = new Intl.NumberFormat(locale, {       
+                minimumFractionDigits: gaugeOptions.precision,
+                maximumFractionDigits: gaugeOptions.precision,
+                useGrouping: useGrouping
+            });
+        
+            switch(metricType) {
+                case "PERCENT":    
+                    result = formatter.format((parseFloat(value) * 100)) + "%";
+                    break;
+                case "DURATION":
+                    result = new Date(parseInt(value) * 1000).toISOString().substr(11, 8)
+                    break;
+                case "NUMBER":
+                default:
+                    result = formatter.format(value);
+            }
         }
     }
     return result;
